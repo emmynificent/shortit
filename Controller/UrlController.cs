@@ -19,13 +19,14 @@ namespace shortit.Controller
         }
 
         [HttpPost("shorten")]
-        public async Task<IActionResult> ShortenUrl(ShortenUrlRequestDto request)
+        public async Task<IActionResult> ShortenUrl(shortenUrlRequestDto request)
         {
             try{
                 var requestMap = _mapper.Map<OriginalUrl>(request);
                 var response = await _urlService.ShortenUrl(requestMap, HttpContext);
                 var responseMap = _mapper.Map<shortenUrlResponseDto>(response);
                 
+                //return Redirect(responseMap);
                 return Ok(responseMap);
 
             }
@@ -35,18 +36,18 @@ namespace shortit.Controller
             }
         }
 
-        [HttpGet("shortcode")]
-        public async Task<IActionResult> RedirectUrl(string shortCode)
-        {
-            try{
-                var originalUrls = await _urlService.RedirectToOriginalUrl(shortCode);
-                return Redirect(originalUrls);
-            }
-            catch(KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
+        // [HttpGet("shortcode")]
+        // public async Task<IActionResult> RedirectUrl(string shortCode)
+        // {
+        //     try{
+        //         var originalUrls = await _urlService.RedirectToOriginalUrl(shortCode);
+        //         return Redirect(originalUrls);
+        //     }
+        //     catch(KeyNotFoundException ex)
+        //     {
+        //         return NotFound(ex.Message);
+        //     }
+        // }
 
     }
 }

@@ -9,28 +9,14 @@ namespace shortit.UrlService
     public class UrlService : IUrlService
     {
         private readonly ShortenDbContext _shortenDbContext;
-        private readonly Random _random;
+        //private readonly Random _random  = new();
     
-        public UrlService(ShortenDbContext shortenDbContext, Random random)
+        public UrlService(ShortenDbContext shortenDbContext)
         {
             _shortenDbContext = shortenDbContext;
-            _random = random;
         }
 
-        public async Task<string> RedirectToOriginalUrl(string shortCode)
-        {
-            var url = await _shortenDbContext.originalUrls
-            .FirstOrDefaultAsync(u => u.shortUrl == shortCode);
-
-            if(url == null)
-            {
-                throw new KeyNotFoundException("Short Url Not Found");
-            }
-
-            return url.Url;
-        }
-
-        public async Task<OriginalUrl> ShortenUrl(OriginalUrl urlRequest, HttpContext httpContext)
+        public async Task<string> ShortenUrl(OriginalUrl urlRequest, HttpContext httpContext)
         {
             if(!Uri.TryCreate(urlRequest.Url, UriKind.Absolute, out  _))
             {
@@ -39,24 +25,45 @@ namespace shortit.UrlService
             var shortCode = GenerateShortCode();
             
             var newUrl = new OriginalUrl{
-                Url = urlRequest.Url,
-                shortUrl = shortCode
+                 Url = urlRequest.Url,
+                 shortUrl = shortCode
             };
 
             _shortenDbContext.Add(newUrl);
             await _shortenDbContext.SaveChangesAsync();
 
-            var srtUrl = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/{shortCode}";
+            return  $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/{shortCode}";
             
 
-            return new OriginalUrl {shortUrl = srtUrl};
         }
 
-        public string GenerateShortCode()
+        public async Task<string> RedirectToOriginalUrl(string shortCode)
         {
+            var url = await _shortenDbContext.originalUrls.
+            FirstOrDefaultAsync(u=> u.shortUrl == shortCode.Trim());
+                        
+
+            // var url =await  _shortenDbContext.originalUrls
+            // .FirstOrDefaultAsync( u=> u.shortUrl == shortCode);
+
+            // var url = await _shortenDbContext.originalUrls
+            // .FirstOrDefaultAsync(u => u.shortUrl == shortCode.Trim());
+            if(url == null)
+            {
+                throw new KeyNotFoundException("Short Url Not Found");
+            }
+
+            return url.Url;
+
+        }
+        
+
+        private string GenerateShortCode()
+        {
+            Random random = new Random();
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             return new string(Enumerable.Repeat(chars, 7)
-            .Select(s=>s[_random.Next(s.Length)])
+            .Select(s=>s[random.Next(s.Length)])
             .ToArray());
             
         }

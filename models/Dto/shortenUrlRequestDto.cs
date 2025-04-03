@@ -1,6 +1,6 @@
 namespace shortit.models.Dto
 {
-    public class ShortenUrlRequestDto
+    public class shortenUrlRequestDto
     {
         public string Url {get; set;}
     }

@@ -4,7 +4,7 @@ namespace shortit.Interface
 {
     public interface IUrlService
     {
-        Task <OriginalUrl> ShortenUrl(OriginalUrl urlRequest, HttpContext httpContext);
+        Task <string> ShortenUrl(OriginalUrl urlRequest, HttpContext httpContext);
         Task<string> RedirectToOriginalUrl (string shortCode);
     }
 }

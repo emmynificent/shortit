@@ -10,8 +10,12 @@ namespace shortit.Mapper
         {
             CreateMap<OriginalUrl, shortenUrlResponseDto>();
             CreateMap<shortenUrlResponseDto, OriginalUrl>();
-            CreateMap<OriginalUrl, ShortenUrlRequestDto>();
-            CreateMap<ShortenUrlRequestDto, OriginalUrl>();
+            CreateMap<shortenUrlRequestDto, OriginalUrl>();
+            CreateMap<OriginalUrl, shortenUrlRequestDto>();
+            CreateMap<string, shortenUrlResponseDto>()
+            .ForMember(dest => dest.shortUrl,
+            opt =>opt.MapFrom(src=> src));
+           
         }
     }
 }

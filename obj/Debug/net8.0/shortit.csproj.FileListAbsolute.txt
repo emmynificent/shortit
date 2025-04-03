@@ -168,3 +168,4 @@ C:\Users\Oluwaseun O\Desktop\asp\shortit\shortit\obj\Debug\net8.0\refint\shortit
 C:\Users\Oluwaseun O\Desktop\asp\shortit\shortit\obj\Debug\net8.0\shortit.pdb
 C:\Users\Oluwaseun O\Desktop\asp\shortit\shortit\obj\Debug\net8.0\shortit.genruntimeconfig.cache
 C:\Users\Oluwaseun O\Desktop\asp\shortit\shortit\obj\Debug\net8.0\ref\shortit.dll
+C:\Users\Oluwaseun O\Desktop\asp\shortit\shortit\obj\Debug\net8.0\shortit.sourcelink.json

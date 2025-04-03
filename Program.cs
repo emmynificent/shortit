@@ -20,6 +20,18 @@ builder.Services.AddDbContext<ShortenDbContext>(options=>{
     options.UseSqlServer(builder.Configuration.GetConnectionString("Shorter"));
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBrowser", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+
+   
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -28,9 +40,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseRouting();
+app.UseCors("AllowBrowser");
+app.UseAuthorization();
+app.UseHttpsRedirection();
+
 
 app.MapControllers();
-app.UseHttpsRedirection();
+
+
 
 
 app.Run();
